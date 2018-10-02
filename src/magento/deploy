@@ -17,7 +17,7 @@ php bin/magento setup:db-data:upgrade
 php bin/magento setup:db-schema:upgrade
 
 # Compile code
-# php bin/magento setup:di:compile
+php bin/magento setup:di:compile
 
 # Reindex
 php bin/magento indexer:reindex
@@ -26,7 +26,7 @@ php bin/magento indexer:reindex
 php bin/magento catalog:images:resize
 
 # Set themes as physical
-php bin/magento dg-util:set-themes
+php bin/magento mindmagnet-util:set-themes
 
 # Deploy static view files
 php bin/magento setup:static-content:deploy en_US -f --no-html-minify

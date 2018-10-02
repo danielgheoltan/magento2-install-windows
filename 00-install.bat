@@ -28,8 +28,6 @@ if not exist "!PROJECT_PATH!" (
     mkdir "!PROJECT_PATH!"
 )
 
-cd /d "!PROJECT_PATH!"
-
 :: ---------------------------------------------------------------------------
 :: Hosts Setup
 
@@ -45,9 +43,18 @@ mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
 :: ---------------------------------------------------------------------------
 :: Magento Setup
 
-cd /d "!PROJECT_PATH!"
-
-call composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition .
+if "%1"=="" (
+    cd /d "!PROJECT_PATH!"
+    call composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition .
+    copy "!INSTALL_PATH!src\magento\auth.json" "!PROJECT_PATH!"
+) else (
+    copy "!INSTALL_PATH!src\magento\auth.json" "!PROJECT_PATH!"
+    copy "!INSTALL_PATH!src\magento\composer.json" "!PROJECT_PATH!"
+    cd /d "!PROJECT_PATH!"
+    call composer config version %1
+    call composer require magento/product-community-edition %1 --no-update
+    call composer install
+)
 
 php bin/magento setup:install ^
     --db-host="!MYSQL_HOST!" ^
@@ -62,8 +69,6 @@ php bin/magento setup:install ^
     --admin-lastname="!MAGENTO_ADMIN_LASTNAME!" ^
     --admin-email="!MAGENTO_ADMIN_EMAIL!" ^
     --use-rewrites=1
-
-copy "!INSTALL_PATH!src\magento\auth.json" "!PROJECT_PATH!"
 
 :: ---------------------------------------------------------------------------
 :: Set Developer Mode
@@ -109,10 +114,6 @@ mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
 
 mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
     "USE `!MYSQL_DATABASE!`; INSERT INTO `core_config_data` (scope, scope_id, path, value) VALUES ('default', 0, 'admin/startup/menu_item_id', 'Magento_Config::system_config') ON DUPLICATE KEY UPDATE `value` = 'Magento_Config::system_config';"
-
-:: ---------------------------------------------------------------------------
-:: Disable Admin Notifications
-:: TODO
 
 :: ---------------------------------------------------------------------------
 :: Grunt Setup

@@ -25,7 +25,7 @@ CALL php bin/magento setup:db-data:upgrade
 CALL php bin/magento setup:db-schema:upgrade
 
 :: Compile code
-REM CALL php bin/magento setup:di:compile
+CALL php bin/magento setup:di:compile
 
 :: Reindex
 CALL php bin/magento indexer:reindex
@@ -34,7 +34,7 @@ CALL php bin/magento indexer:reindex
 CALL php bin/magento catalog:images:resize
 
 :: Set themes as physical
-CALL php bin/magento dg-showcase:set-themes
+CALL php bin/magento mindmagnet-util:set-themes
 
 :: Deploy static view files
 CALL php bin/magento setup:static-content:deploy en_US --no-html-minify -f
