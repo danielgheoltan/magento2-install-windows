@@ -8,7 +8,6 @@ CALL php bin/magento maintenance:enable
 
 :: Cleanup
 CALL :deleteFolder "generated"
-CALL :deleteFolder "pub/static/adminhtml"
 CALL :deleteFolder "pub/static/frontend"
 CALL :deleteFolder "var/cache"
 CALL :deleteFolder "var/page_cache"
