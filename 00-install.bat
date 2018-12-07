@@ -124,7 +124,7 @@ rename Gruntfile.js.sample Gruntfile.js
 rename grunt-config.json.sample grunt-config.json
 rename package.json.sample package.json
 
-copy /y "!INSTALL_PATH!\src\magento\local-themes.js" "!PROJECT_PATH!\dev\tools\grunt\configs\local-themes.js"
+copy /y "!INSTALL_PATH!\src\magento\dev\tools\grunt\configs\local-themes.js" "!PROJECT_PATH!\dev\tools\grunt\configs\local-themes.js"
 
 call npm install
 

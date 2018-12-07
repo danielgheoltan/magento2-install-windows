@@ -3,4 +3,4 @@ CLS
 
 :: ----------------------------------------------------------------------------
 
-CALL grunt less:mm & grunt watch less:mm
+CALL grunt less:%1 & grunt watch less:%1
