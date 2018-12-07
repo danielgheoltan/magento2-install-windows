@@ -43,18 +43,15 @@ mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
 :: ---------------------------------------------------------------------------
 :: Magento Setup
 
+cd /d "!PROJECT_PATH!"
+
 if "%1"=="" (
-    cd /d "!PROJECT_PATH!"
-    call composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition .
-    copy "!INSTALL_PATH!src\magento\auth.json" "!PROJECT_PATH!"
+    call composer create-project --repository=https://repo.magento.com/ magento/project-community-edition .
 ) else (
-    copy "!INSTALL_PATH!src\magento\auth.json" "!PROJECT_PATH!"
-    copy "!INSTALL_PATH!src\magento\composer.json" "!PROJECT_PATH!"
-    cd /d "!PROJECT_PATH!"
-    call composer config version %1
-    call composer require magento/product-community-edition %1 --no-update
-    call composer install
+    call composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=%1 .
 )
+
+copy "!INSTALL_PATH!src\magento\auth.json" "!PROJECT_PATH!"
 
 php bin/magento setup:install ^
     --db-host="!MYSQL_HOST!" ^
