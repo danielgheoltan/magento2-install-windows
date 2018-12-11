@@ -3,14 +3,25 @@ CLS
 
 :: ----------------------------------------------------------------------------
 
-CALL :deleteFolder "pub/static/frontend/%2"
+SET THEME=%1
+SET LOCALE=%2
+SET GRUNT_THEME=%3
+
+:: ----------------------------------------------------------------------------
+
+CALL :deleteFolder "pub/static/frontend/%THEME%/%LOCALE%"
 CALL :deleteFolder "var/cache"
 CALL :deleteFolder "var/page_cache"
-CALL :deleteFolder "var/view_preprocessed"
+CALL :deleteFolder "var/view_preprocessed/less/frontend/%THEME%/%LOCALE%"
+CALL :deleteFolder "var/view_preprocessed/pub/static/frontend/%THEME%/%LOCALE%"
+CALL :deleteFolder "var/view_preprocessed/source/frontend/%THEME%/%LOCALE%"
+ECHO.
 
-CALL grunt exec:%1
-CALL php bin/magento setup:static-content:deploy en_US --theme="%2" --no-html-minify -f
-CALL grunt less:%1 & grunt watch less:%1
+:: ----------------------------------------------------------------------------
+
+CALL grunt exec:%GRUNT_THEME%
+CALL php bin/magento setup:static-content:deploy %LOCALE% --theme="%THEME%" --no-html-minify -f
+CALL grunt watch less:%GRUNT_THEME%
 
 :: ----------------------------------------------------------------------------
 
@@ -23,7 +34,18 @@ EXIT /B %ERRORLEVEL%
 
 :deleteFolder
 IF EXIST "%~1" (
-    RMDIR /s /q "%~1";
+    RMDIR /S /Q "%~1";
+)
+
+ECHO "%~1" has been deleted.
+
+EXIT /B 0
+
+:: ----------------------------------------------------------------------------
+
+:deleteFile
+IF EXIST "%~1" (
+    DEL /Q /F "%~1";
 )
 
 ECHO "%~1" has been deleted.

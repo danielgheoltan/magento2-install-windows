@@ -30,7 +30,7 @@ EXIT /B %ERRORLEVEL%
 
 :deleteFolder
 IF EXIST "%~1" (
-    RMDIR /s /q "%~1";
+    RMDIR /S /Q "%~1";
 )
 
 ECHO "%~1" has been deleted.

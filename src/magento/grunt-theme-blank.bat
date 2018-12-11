@@ -3,4 +3,4 @@ CLS
 
 :: ----------------------------------------------------------------------------
 
-CALL grunt less:blank & grunt watch less:blank
+CALL grunt-theme blank

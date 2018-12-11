@@ -19,11 +19,8 @@ CALL php bin/magento cache:flush
 :: Run setup scripts
 CALL php bin/magento setup:upgrade
 
-:: Set themes as physical
-CALL php bin/magento mindmagnet-util:set-themes
-
 :: Deploy static files
-CALL php bin/magento setup:static-content:deploy en_US --area="frontend" -f
+CALL php bin/magento setup:static-content:deploy en_US --area="frontend" --no-html-minify -f
 
 :: Disable maintenance mode
 CALL php bin/magento maintenance:disable
@@ -39,7 +36,7 @@ EXIT /B %ERRORLEVEL%
 
 :deleteFolder
 IF EXIST "%~1" (
-    RMDIR /s /q "%~1";
+    RMDIR /S /Q "%~1";
 )
 
 ECHO "%~1" has been deleted.

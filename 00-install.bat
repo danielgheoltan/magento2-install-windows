@@ -129,7 +129,6 @@ call npm install
 :: Create Symlinks
 
 call mklink /j "!SYMLINK!" "!PROJECT_PATH!"
-call mklink "!PROJECT_PATH!/deploy" "!INSTALL_PATH!src\magento\deploy"
 call mklink "!PROJECT_PATH!/deploy.bat" "!INSTALL_PATH!src\magento\deploy.bat"
 call mklink "!PROJECT_PATH!/deploy-frontend.bat" "!INSTALL_PATH!src\magento\deploy-frontend.bat"
 call mklink "!PROJECT_PATH!/deploy-backend.bat" "!INSTALL_PATH!src\magento\deploy-backend.bat"

@@ -3,4 +3,4 @@ CLS
 
 :: ----------------------------------------------------------------------------
 
-CALL grunt less:luma & grunt watch less:luma
+CALL grunt-theme luma
