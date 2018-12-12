@@ -7,8 +7,7 @@ CLS
 CALL php bin/magento maintenance:enable
 
 :: Cleanup
-CALL :deleteFolder "generated"
-CALL :deleteFolder "var/di"
+RMDIR /S /Q "generated" "var/di" 2>NUL
 
 :: Flush cache
 CALL php bin/magento cache:flush
@@ -23,16 +22,3 @@ CALL php bin/magento maintenance:disable
 
 :: Force execution to quit at the end of the "main" logic
 EXIT /B %ERRORLEVEL%
-
-:: ----------------------------------------------------------------------------
-:: Functions
-:: ----------------------------------------------------------------------------
-
-:deleteFolder
-IF EXIST "%~1" (
-    RMDIR /S /Q "%~1";
-)
-
-ECHO "%~1" has been deleted.
-
-EXIT /B 0

@@ -9,13 +9,12 @@ SET GRUNT_THEME=%3
 
 :: ----------------------------------------------------------------------------
 
-CALL :deleteFolder "pub/static/frontend/%THEME%/%LOCALE%"
-CALL :deleteFolder "var/cache"
-CALL :deleteFolder "var/page_cache"
-CALL :deleteFolder "var/view_preprocessed/less/frontend/%THEME%/%LOCALE%"
-CALL :deleteFolder "var/view_preprocessed/pub/static/frontend/%THEME%/%LOCALE%"
-CALL :deleteFolder "var/view_preprocessed/source/frontend/%THEME%/%LOCALE%"
-ECHO.
+RMDIR /S /Q "pub/static/frontend/%THEME%/%LOCALE%" ^
+            "var/cache" ^
+            "var/page_cache" ^
+            "var/view_preprocessed/less/frontend/%THEME%/%LOCALE%" ^
+            "var/view_preprocessed/pub/static/frontend/%THEME%/%LOCALE%" ^
+            "var/view_preprocessed/source/frontend/%THEME%/%LOCALE%" 2>NUL
 
 :: ----------------------------------------------------------------------------
 
@@ -27,27 +26,3 @@ CALL grunt watch less:%GRUNT_THEME%
 
 :: Force execution to quit at the end of the "main" logic
 EXIT /B %ERRORLEVEL%
-
-:: ----------------------------------------------------------------------------
-:: Functions
-:: ----------------------------------------------------------------------------
-
-:deleteFolder
-IF EXIST "%~1" (
-    RMDIR /S /Q "%~1";
-)
-
-ECHO "%~1" has been deleted.
-
-EXIT /B 0
-
-:: ----------------------------------------------------------------------------
-
-:deleteFile
-IF EXIST "%~1" (
-    DEL /Q /F "%~1";
-)
-
-ECHO "%~1" has been deleted.
-
-EXIT /B 0

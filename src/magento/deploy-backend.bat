@@ -7,11 +7,8 @@ CLS
 CALL php bin/magento maintenance:enable
 
 :: Cleanup
-CALL :deleteFolder "generated"
-CALL :deleteFolder "pub/static/adminhtml"
-CALL :deleteFolder "var/cache"
-CALL :deleteFolder "var/page_cache"
-CALL :deleteFolder "var/view_preprocessed"
+RMDIR /S /Q "generated" "pub/static/adminhtml" "var/cache" "var/page_cache" "var/view_preprocessed" 2>NUL
+DEL /Q /F "pub\static\deployed_version.txt" 2>NUL
 
 :: Flush cache
 CALL php bin/magento cache:flush
@@ -29,16 +26,3 @@ CALL php bin/magento maintenance:disable
 
 :: Force execution to quit at the end of the "main" logic
 EXIT /B %ERRORLEVEL%
-
-:: ----------------------------------------------------------------------------
-:: Functions
-:: ----------------------------------------------------------------------------
-
-:deleteFolder
-IF EXIST "%~1" (
-    RMDIR /S /Q "%~1";
-)
-
-ECHO "%~1" has been deleted.
-
-EXIT /B 0
