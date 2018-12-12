@@ -5,9 +5,10 @@ setlocal enableDelayedExpansion
 :: ----------------------------------------------------------------------------
 
 call config
-set INSTALL_PATH=%~dp0
 
 :: ----------------------------------------------------------------------------
+
+set INSTALL_PATH=%~dp0
 
 for /f "skip=1" %%x in ('wmic os get LocalDateTime') do (
     if not defined TIMESTAMP set TIMESTAMP=%%x
