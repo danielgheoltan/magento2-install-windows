@@ -7,22 +7,32 @@ setlocal enableDelayedExpansion
 call config
 
 :: ----------------------------------------------------------------------------
+:: Variables
 
 set INSTALL_PATH=%~dp0
 
+set TIMESTAMP=
 for /f "skip=1" %%x in ('wmic os get LocalDateTime') do (
-    if not defined TIMESTAMP set TIMESTAMP=%%x
+    if not defined TIMESTAMP (
+        set TIMESTAMP=%%x
+        set TIMESTAMP=!TIMESTAMP:~0,14!
+    )
 )
 
 for %%i in ("!PROJECT_PATH!") do (
     set PROJECT_FOLDER=%%~ni
 )
 
+set FOUND_DATABASE=0
+for /f %%i in ('mysql -u root -proot -e "SHOW DATABASES LIKE '!MYSQL_DATABASE!'"') do (
+    set FOUND_DATABASE=%%i
+)
+
 :: ----------------------------------------------------------------------------
 :: Folders Setup
 
 if exist "!PROJECT_PATH!" (
-    rename "!PROJECT_PATH!" "!PROJECT_FOLDER!_!TIMESTAMP:~0,14!"
+    rename "!PROJECT_PATH!" "!PROJECT_FOLDER!_!TIMESTAMP!"
 )
 
 if not exist "!PROJECT_PATH!" (
@@ -30,13 +40,14 @@ if not exist "!PROJECT_PATH!" (
 )
 
 :: ----------------------------------------------------------------------------
-:: Hosts Setup
-
-call "!INSTALL_PATH!src/util/hosts" add "!PROJECT_HOST!"
-call "!INSTALL_PATH!src/util/hosts" format
-
-:: ----------------------------------------------------------------------------
 :: Database Setup
+
+if not "!FOUND_DATABASE!" == "0" (
+    mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
+        "CREATE DATABASE `!MYSQL_DATABASE!_!TIMESTAMP!`;"
+
+    mysqldump -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! !MYSQL_DATABASE! | mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -D !MYSQL_DATABASE!_!TIMESTAMP!
+)
 
 mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
     "DROP DATABASE IF EXISTS `!MYSQL_DATABASE!`; CREATE DATABASE `!MYSQL_DATABASE!`;"
@@ -66,6 +77,9 @@ php bin/magento setup:install ^
     --admin-firstname="!MAGENTO_ADMIN_FIRSTNAME!" ^
     --admin-lastname="!MAGENTO_ADMIN_LASTNAME!" ^
     --admin-email="!MAGENTO_ADMIN_EMAIL!" ^
+    --language="!MAGENTO_LANGUAGE!" ^
+    --currency="!MAGENTO_CURRENCY!" ^
+    --timezone="!MAGENTO_TIMEZONE!" ^
     --use-rewrites=1
 
 :: ----------------------------------------------------------------------------
@@ -101,7 +115,7 @@ mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
 
 mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
     "USE `!MYSQL_DATABASE!`; INSERT INTO `core_config_data` (scope, scope_id, path, value) VALUES ('default', 0, 'cms/wysiwyg/enabled', 'hidden') ON DUPLICATE KEY UPDATE `value` = 'hidden';"
-    
+
 :: ----------------------------------------------------------------------------
 :: Set Admin Startup Page
 
@@ -113,27 +127,27 @@ mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
 
 cd /d "!PROJECT_PATH!"
 
-rename Gruntfile.js.sample Gruntfile.js
+rename Gruntfile.js.sample      Gruntfile.js
 rename grunt-config.json.sample grunt-config.json
-rename package.json.sample package.json
+rename package.json.sample      package.json
 
 copy /y "!INSTALL_PATH!\src\magento\dev\tools\grunt\configs\local-themes.js" "!PROJECT_PATH!\dev\tools\grunt\configs\local-themes.js"
 
 call npm install
 
 :: ----------------------------------------------------------------------------
-:: Create Symlinks
+:: Copy batch files
 
-call mklink "!PROJECT_PATH!/deploy.bat"             "!INSTALL_PATH!src\magento\deploy.bat"
-call mklink "!PROJECT_PATH!/deploy-backend.bat"     "!INSTALL_PATH!src\magento\deploy-backend.bat"
-call mklink "!PROJECT_PATH!/deploy-frontend.bat"    "!INSTALL_PATH!src\magento\deploy-frontend.bat"
-call mklink "!PROJECT_PATH!/deploy-theme.bat"       "!INSTALL_PATH!src\magento\deploy-theme.bat"
-call mklink "!PROJECT_PATH!/deploy-theme-blank.bat" "!INSTALL_PATH!src\magento\deploy-theme-blank.bat"
-call mklink "!PROJECT_PATH!/deploy-theme-luma.bat"  "!INSTALL_PATH!src\magento\deploy-theme-luma.bat"
-call mklink "!PROJECT_PATH!/di.bat"                 "!INSTALL_PATH!src\magento\di.bat"
-call mklink "!PROJECT_PATH!/grunt-theme.bat"        "!INSTALL_PATH!src\magento\grunt-theme.bat"
-call mklink "!PROJECT_PATH!/grunt-theme-blank.bat"  "!INSTALL_PATH!src\magento\grunt-theme-blank.bat"
-call mklink "!PROJECT_PATH!/grunt-theme-luma.bat"   "!INSTALL_PATH!src\magento\grunt-theme-luma.bat"
+copy "!INSTALL_PATH!src\magento\deploy.bat"             "!PROJECT_PATH!/deploy.bat"
+copy "!INSTALL_PATH!src\magento\deploy-backend.bat"     "!PROJECT_PATH!/deploy-backend.bat"
+copy "!INSTALL_PATH!src\magento\deploy-frontend.bat"    "!PROJECT_PATH!/deploy-frontend.bat"
+copy "!INSTALL_PATH!src\magento\deploy-theme.bat"       "!PROJECT_PATH!/deploy-theme.bat"
+copy "!INSTALL_PATH!src\magento\deploy-theme-blank.bat" "!PROJECT_PATH!/deploy-theme-blank.bat"
+copy "!INSTALL_PATH!src\magento\deploy-theme-luma.bat"  "!PROJECT_PATH!/deploy-theme-luma.bat"
+copy "!INSTALL_PATH!src\magento\di.bat"                 "!PROJECT_PATH!/di.bat"
+copy "!INSTALL_PATH!src\magento\grunt-theme.bat"        "!PROJECT_PATH!/grunt-theme.bat"
+copy "!INSTALL_PATH!src\magento\grunt-theme-blank.bat"  "!PROJECT_PATH!/grunt-theme-blank.bat"
+copy "!INSTALL_PATH!src\magento\grunt-theme-luma.bat"   "!PROJECT_PATH!/grunt-theme-luma.bat"
 
 :: ----------------------------------------------------------------------------
 :: The End - Miscellaneous Commands

@@ -1,5 +1,4 @@
 set PROJECT_PATH=D:/Magento/ce/v2.3.0
-set PROJECT_HOST=magento-ce-2-3-0.local
 
 set MYSQL_HOST=localhost
 set MYSQL_USERNAME=root
@@ -13,3 +12,6 @@ set MAGENTO_ADMIN_PASSWORD=admin123
 set MAGENTO_ADMIN_FIRSTNAME=admin
 set MAGENTO_ADMIN_LASTNAME=admin
 set MAGENTO_ADMIN_EMAIL=noreply@domain.com
+set MAGENTO_LANGUAGE=en_US
+set MAGENTO_CURRENCY=USD
+set MAGENTO_TIMEZONE=America/Los_Angeles
