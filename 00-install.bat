@@ -23,7 +23,7 @@ for %%i in ("!PROJECT_PATH!") do (
     set PROJECT_FOLDER=%%~ni
 )
 
-set DATABASE
+set DATABASE=
 for /f %%i in ('mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e "SHOW DATABASES LIKE '!MYSQL_DATABASE!'"') do (
     set DATABASE=%%i
 )
