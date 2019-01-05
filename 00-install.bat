@@ -23,9 +23,9 @@ for %%i in ("!PROJECT_PATH!") do (
     set PROJECT_FOLDER=%%~ni
 )
 
-set FOUND_DATABASE=0
-for /f %%i in ('mysql -u root -proot -e "SHOW DATABASES LIKE '!MYSQL_DATABASE!'"') do (
-    set FOUND_DATABASE=%%i
+set DATABASE
+for /f %%i in ('mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e "SHOW DATABASES LIKE '!MYSQL_DATABASE!'"') do (
+    set DATABASE=%%i
 )
 
 :: ----------------------------------------------------------------------------
@@ -42,7 +42,7 @@ if not exist "!PROJECT_PATH!" (
 :: ----------------------------------------------------------------------------
 :: Database Setup
 
-if not "!FOUND_DATABASE!" == "0" (
+if defined DATABASE (
     mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
         "CREATE DATABASE `!MYSQL_DATABASE!_!TIMESTAMP!`;"
 
@@ -136,7 +136,7 @@ copy /y "!INSTALL_PATH!\src\magento\dev\tools\grunt\configs\local-themes.js" "!P
 call npm install
 
 :: ----------------------------------------------------------------------------
-:: Copy batch files
+:: Copy Batch Files
 
 copy "!INSTALL_PATH!src\magento\deploy.bat"             "!PROJECT_PATH!/deploy.bat"
 copy "!INSTALL_PATH!src\magento\deploy-backend.bat"     "!PROJECT_PATH!/deploy-backend.bat"
