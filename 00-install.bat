@@ -57,13 +57,15 @@ mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
 
 cd /d "!PROJECT_PATH!"
 
+set COMPOSER_AUTH={"http-basic": {"repo.magento.com": {"username": "!MAGENTO_PUBLIC_KEY!", "password": "!MAGENTO_PRIVATE_KEY!"}}}
+
 if "%1"=="" (
     call composer create-project --repository=https://repo.magento.com/ magento/project-community-edition .
 ) else (
     call composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=%1 .
 )
 
-copy "!INSTALL_PATH!src\magento\auth.json" "!PROJECT_PATH!"
+echo !COMPOSER_AUTH! > auth.json
 
 php bin/magento setup:install ^
     --db-host="!MYSQL_HOST!" ^
