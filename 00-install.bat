@@ -138,18 +138,4 @@ copy /y "!INSTALL_PATH!\src\magento\dev\tools\grunt\configs\local-themes.js" "!P
 call npm install
 
 :: ----------------------------------------------------------------------------
-:: Copy Batch Files
-
-copy "!INSTALL_PATH!src\magento\deploy.bat"             "!PROJECT_PATH!/deploy.bat"
-copy "!INSTALL_PATH!src\magento\deploy-backend.bat"     "!PROJECT_PATH!/deploy-backend.bat"
-copy "!INSTALL_PATH!src\magento\deploy-frontend.bat"    "!PROJECT_PATH!/deploy-frontend.bat"
-copy "!INSTALL_PATH!src\magento\deploy-theme.bat"       "!PROJECT_PATH!/deploy-theme.bat"
-copy "!INSTALL_PATH!src\magento\deploy-theme-blank.bat" "!PROJECT_PATH!/deploy-theme-blank.bat"
-copy "!INSTALL_PATH!src\magento\deploy-theme-luma.bat"  "!PROJECT_PATH!/deploy-theme-luma.bat"
-copy "!INSTALL_PATH!src\magento\di.bat"                 "!PROJECT_PATH!/di.bat"
-copy "!INSTALL_PATH!src\magento\grunt-theme.bat"        "!PROJECT_PATH!/grunt-theme.bat"
-copy "!INSTALL_PATH!src\magento\grunt-theme-blank.bat"  "!PROJECT_PATH!/grunt-theme-blank.bat"
-copy "!INSTALL_PATH!src\magento\grunt-theme-luma.bat"   "!PROJECT_PATH!/grunt-theme-luma.bat"
-
-:: ----------------------------------------------------------------------------
 :: The End - Miscellaneous Commands
