@@ -22,7 +22,5 @@ call 00-install %1
 
 cd /d "!PROJECT_PATH!"
 
-call deploy
-
 start "Front-end" /max "!MAGENTO_BASE_URL!"
 start "Back-end" /max "!MAGENTO_BASE_URL!/!MAGENTO_BACKEND_FRONTNAME!"
