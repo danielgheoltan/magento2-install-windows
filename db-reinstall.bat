@@ -12,7 +12,7 @@ call config
 mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
     "DROP DATABASE IF EXISTS `!MYSQL_DATABASE!`; CREATE DATABASE `!MYSQL_DATABASE!`;"
 
-:: ---------------------------------------------------------------------------
+:: ----------------------------------------------------------------------------
 :: Magento Setup
 
 cd /d "!PROJECT_PATH!"
@@ -29,52 +29,45 @@ php bin/magento setup:install ^
     --admin-firstname="!MAGENTO_ADMIN_FIRSTNAME!" ^
     --admin-lastname="!MAGENTO_ADMIN_LASTNAME!" ^
     --admin-email="!MAGENTO_ADMIN_EMAIL!" ^
+    --language="!MAGENTO_LANGUAGE!" ^
+    --currency="!MAGENTO_CURRENCY!" ^
+    --timezone="!MAGENTO_TIMEZONE!" ^
     --use-rewrites=1
 
-:: ---------------------------------------------------------------------------
+:: ----------------------------------------------------------------------------
 :: Set Developer Mode
 
 php bin/magento deploy:mode:set developer
 
-:: ---------------------------------------------------------------------------
-:: Change Uniform Resource Identifier (URI) to access the Magento Admin
-
-REM php bin/magento setup:config:set --no-interaction --backend-frontname=!MAGENTO_ADMIN_URL!
-
-:: ---------------------------------------------------------------------------
-:: Disable some cache types
+:: ----------------------------------------------------------------------------
+:: Disable Some Cache Types
 
 php bin/magento cache:disable layout block_html full_page translate
 
-:: ---------------------------------------------------------------------------
+:: ----------------------------------------------------------------------------
 :: Set Session Lifetime
 
-mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
-    "USE `!MYSQL_DATABASE!`; INSERT INTO `core_config_data` (scope, scope_id, path, value) VALUES ('default', 0, 'admin/security/session_lifetime', 604800) ON DUPLICATE KEY UPDATE `value` = 604800;"
+php bin/magento config:set admin/security/session_lifetime 604800
 
-:: ---------------------------------------------------------------------------
+:: ----------------------------------------------------------------------------
 :: Disable Sign Static Files
 
-mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
-    "USE `!MYSQL_DATABASE!`; INSERT INTO `core_config_data` (scope, scope_id, path, value) VALUES ('default', 0, 'dev/static/sign', 0) ON DUPLICATE KEY UPDATE `value` = 0;"
+php bin/magento config:set dev/static/sign 0
 
-:: ---------------------------------------------------------------------------
+:: ----------------------------------------------------------------------------
 :: Allow Symlinks
 
-mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
-    "USE `!MYSQL_DATABASE!`; INSERT INTO `core_config_data` (scope, scope_id, path, value) VALUES ('default', 0, 'dev/template/allow_symlink', 1) ON DUPLICATE KEY UPDATE `value` = 1;"
+php bin/magento config:set dev/template/allow_symlink 1
 
-:: ---------------------------------------------------------------------------
+:: ----------------------------------------------------------------------------
 :: Disable WYSIWYG Editor by Default
 
-mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
-    "USE `!MYSQL_DATABASE!`; INSERT INTO `core_config_data` (scope, scope_id, path, value) VALUES ('default', 0, 'cms/wysiwyg/enabled', 'hidden') ON DUPLICATE KEY UPDATE `value` = 'hidden';"
+php bin/magento config:set cms/wysiwyg/enabled hidden
     
-:: ---------------------------------------------------------------------------
+:: ----------------------------------------------------------------------------
 :: Set Admin Startup Page
 
-mysql -u !MYSQL_USERNAME! -p!MYSQL_PASSWORD! -e ^
-    "USE `!MYSQL_DATABASE!`; INSERT INTO `core_config_data` (scope, scope_id, path, value) VALUES ('default', 0, 'admin/startup/menu_item_id', 'Magento_Config::system_config') ON DUPLICATE KEY UPDATE `value` = 'Magento_Config::system_config';"
+php bin/magento config:set admin/startup/menu_item_id Magento_Config::system_config
 
-:: ---------------------------------------------------------------------------
+:: ----------------------------------------------------------------------------
 :: The End - Miscellaneous Commands
