@@ -113,7 +113,12 @@ php bin/magento config:set dev/template/allow_symlink 1
 :: Disable WYSIWYG Editor by Default
 
 php bin/magento config:set cms/wysiwyg/enabled hidden
-    
+
+:: ----------------------------------------------------------------------------
+:: Disable Captcha in Admin
+
+php bin/magento config:set admin/captcha/enable 0
+
 :: ----------------------------------------------------------------------------
 :: Set Admin Startup Page
 
