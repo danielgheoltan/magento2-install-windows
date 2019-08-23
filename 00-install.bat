@@ -59,11 +59,7 @@ cd /d "!PROJECT_PATH!"
 
 set COMPOSER_AUTH={"http-basic": {"repo.magento.com": {"username": "!MAGENTO_PUBLIC_KEY!", "password": "!MAGENTO_PRIVATE_KEY!"}}}
 
-if "%1"=="" (
-    call composer create-project --repository=https://repo.magento.com/ magento/project-!MAGENTO_EDITION!-edition .
-) else (
-    call composer create-project --repository=https://repo.magento.com/ magento/project-!MAGENTO_EDITION!-edition=%1 .
-)
+call composer create-project --repository=https://repo.magento.com/ magento/project-!MAGENTO_EDITION!-edition=!MAGENTO_VERSION! .
 
 echo !COMPOSER_AUTH! > auth.json
 
