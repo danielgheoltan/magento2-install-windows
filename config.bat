@@ -1,11 +1,11 @@
-set PROJECT_PATH=D:/Magento/ce/v2.3.2
+set PROJECT_PATH=D:/Magento/ce/v2.3.3
 
 set MYSQL_HOST=localhost
 set MYSQL_USERNAME=root
 set MYSQL_PASSWORD=root
-set MYSQL_DATABASE=magento-ce-2-3-2
+set MYSQL_DATABASE=magento-ce-2-3-3
 
-set MAGENTO_BASE_URL=http://magento-ce-2-3-2.local
+set MAGENTO_BASE_URL=http://magento-ce-2-3-3.local
 set MAGENTO_BACKEND_FRONTNAME=admin
 set MAGENTO_ADMIN_USER=admin
 set MAGENTO_ADMIN_PASSWORD=admin123
@@ -16,7 +16,7 @@ set MAGENTO_LANGUAGE=en_US
 set MAGENTO_CURRENCY=USD
 set MAGENTO_TIMEZONE=America/Los_Angeles
 
-set MAGENTO_VERSION=2.3.2
+set MAGENTO_VERSION=2.3.3
 set MAGENTO_EDITION=community
 set MAGENTO_PUBLIC_KEY=6dcd44888ee045d44dd40f0971aaa3ab
 set MAGENTO_PRIVATE_KEY=7c260c09f71864b744003bb4a08d6ae7
